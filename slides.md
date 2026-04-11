@@ -49,3 +49,63 @@ mdc: true
 ---
 transition: fade
 ---
+
+# The Setting: Model Compression
+What is Model Compression?
+
+---
+transition: fade
+---
+
+# The Setting: Model Compression
+Pruning & Quantization
+
+---
+transition: fade
+---
+
+# The Setting: Calibration Data for Model Compression
+Desired Properties
+
+- scalability (G1), i.e., capable of processing massive corpora with minimal
+computational overhead; 
+- model-agnostic (G2), i.e.,
+capable of identifying the most informative examples from a corpus without relying on expensive
+model passes;
+- inter-domain generalization (G3), i.e., being capable of synthesizing
+both Single-Domain and Multi-Domain corpora
+settings by design.
+
+---
+transition: fade
+---
+
+# The Model: Zipfian Sampling
+Languanges and frequency of words
+
+
+---
+transition: fade
+---
+
+# The Model: Zipfian Sampling
+Introducing ZipCal
+
+
+---
+transition: fade
+---
+
+# Experiments: Scalability
+
+---
+transition: fade
+---
+
+# Experiments: Quality
+
+---
+transition: fade
+---
+
+# Remarks: The Difficulty of Choosing Calibration Data
