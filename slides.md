@@ -27,7 +27,7 @@ mdc: true
 <style>
 @font-face {
   font-family: 'Stretch';
-  src: url('/fonts/StretchPro.otf') format('opentype');
+  src: url('./fonts/StretchPro.otf') format('opentype');
   font-display: swap;
 }
 
@@ -38,7 +38,10 @@ mdc: true
 }
 </style>
 
-# <span class="zipcal-title">Frrequenccy Mat terss</span> Fast Model-Agnostic Data Curation for Pruning and Quantization
+
+# <span class="zipcal-title">Frrequenccy Mat terss</span>
+
+Fast Model-Agnostic Data Curation for Pruning and Quantization
 
 <div class="absolute bottom-10">
   <span class="font-700">
