@@ -38,11 +38,11 @@ mdc: true
 }
 </style>
 
-# Enriching Similarity Search Algorithms with Predictors
+# <span class="zipcal-title">Frrequenccy Mat terss</span> Fast Model-Agnostic Data Curation for Pruning and Quantization
 
 <div class="absolute bottom-10">
   <span class="font-700">
-    Francesco Pio Monaco, April 2026
+    Francesco Pio Monaco, Elia Cunegatti, Flavio Vella, Giovanni Iacca April 2026
   </span>
 </div>
 
@@ -109,3 +109,9 @@ transition: fade
 ---
 
 # Remarks: The Difficulty of Choosing Calibration Data
+
+---
+transition: fade
+---
+
+# Obtaining Property G3: Multi-Domain ZipCal
