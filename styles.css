@@ -1,0 +1,16 @@
+:root {
+  --slidev-theme-background: #e7f0f9;
+}
+
+body, .slidev-layout, .slidev-page {
+  font-size: 1.55rem;
+}
+
+.slidev-layout,
+.slidev-page,
+.slidev-slide,
+.slidev-content {
+  background-color: #e7f0f9 !important;
+}
+
+/* Logo positioning and sizing */
