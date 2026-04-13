@@ -2,6 +2,20 @@
   --slidev-theme-background: #e7f0f9;
 }
 
+@font-face {
+  font-family: 'Stretch';
+  src: url('/fonts/StretchPro.otf') format('opentype');
+  font-display: swap;
+}
+
+.zipcal-title {
+  font-family: 'Stretch', sans-serif;
+  font-size: 3rem;
+  letter-spacing: 0.05em;
+  font-variant-ligatures: discretionary-ligatures contextual;
+  font-feature-settings: "liga" 1, "dlig" 1, "calt" 1;
+}
+
 body, .slidev-layout, .slidev-page {
   font-size: 1.55rem;
 }
@@ -14,3 +28,24 @@ body, .slidev-layout, .slidev-page {
 }
 
 /* Logo positioning and sizing */
+.logo-unitn,
+.logo-hicrest {
+  position: fixed;
+  right: clamp(10px, 1.8vw, 24px);
+  z-index: 50;
+  pointer-events: none;
+}
+
+.logo-unitn {
+  top: clamp(8px, 1.6vh, 18px);
+  width: clamp(110px, 13vw, 180px);
+  height: auto;
+}
+
+.logo-hicrest {
+  bottom: clamp(8px, 1.6vh, 18px);
+  width: clamp(100px, 8vw, 120px);
+  height: auto;
+  filter: brightness(0) saturate(100%);
+  opacity: 0.92;
+}

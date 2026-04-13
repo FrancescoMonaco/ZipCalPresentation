@@ -10,15 +10,36 @@
     </div>
     <div style="color: #6497b1; font-size: 0.95rem; margin-top: 0.5rem;">Weight Vector</div>
     <div style="color: #888; font-size: 0.95rem;">Precision: {{ quantized ? 'int8' : 'float32' }}</div>
-    <button @click="quantize" style="margin-top: 1rem;">Quantize</button>
+    <div style="color: #888; font-size: 0.9rem; margin-top: 0.5rem;">Quantization</div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { onBeforeUnmount, onMounted, ref } from 'vue'
+
 const quantized = ref(false)
 const weights = [1.23, -2.45, 0.98, 3.67, -1.11, 2.88]
-function quantize() {
-  quantized.value = true
+
+const CYCLE_MS = 5000
+const QUANTIZE_AT_MS = 2200
+let cycleId
+let phaseId
+
+function runCycle() {
+  quantized.value = false
+  clearTimeout(phaseId)
+  phaseId = setTimeout(() => {
+    quantized.value = true
+  }, QUANTIZE_AT_MS)
 }
+
+onMounted(() => {
+  runCycle()
+  cycleId = setInterval(runCycle, CYCLE_MS)
+})
+
+onBeforeUnmount(() => {
+  clearInterval(cycleId)
+  clearTimeout(phaseId)
+})
 </script>

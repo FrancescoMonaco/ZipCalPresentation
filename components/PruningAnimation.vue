@@ -10,14 +10,35 @@
       </div>
     </div>
     <div style="color: #6497b1; font-size: 0.95rem; margin-top: 0.5rem;">Transformer Block</div>
-    <button @click="prune" style="margin-top: 1rem;">Prune</button>
+    <div style="color: #888; font-size: 0.9rem; margin-top: 0.5rem;">Pruning</div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { onBeforeUnmount, onMounted, ref } from 'vue'
+
 const pruned = ref(false)
-function prune() {
-  pruned.value = true
+
+const CYCLE_MS = 5000
+const PRUNE_AT_MS = 2200
+let cycleId
+let phaseId
+
+function runCycle() {
+  pruned.value = false
+  clearTimeout(phaseId)
+  phaseId = setTimeout(() => {
+    pruned.value = true
+  }, PRUNE_AT_MS)
 }
+
+onMounted(() => {
+  runCycle()
+  cycleId = setInterval(runCycle, CYCLE_MS)
+})
+
+onBeforeUnmount(() => {
+  clearInterval(cycleId)
+  clearTimeout(phaseId)
+})
 </script>

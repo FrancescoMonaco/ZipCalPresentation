@@ -1,5 +1,4 @@
-﻿---
-# You can also start simply with 'default'
+---
 theme: default
 css: styles.css
 # random image from a curated Unsplash collection by Anthony
@@ -23,31 +22,13 @@ mdc: true
 # open graph
 # seoMeta:
 #  ogImage: https://cover.sli.dev
-
 ---
-<style>
-@font-face {
-  font-family: 'Stretch';
-  src: url('/fonts/StretchPro.otf') format('opentype');
-  font-display: swap;
-}
 
-.zipcal-title {
-  font-family: 'Stretch', sans-serif;
-  font-size: 3rem;
-  letter-spacing: 0.05em;
-  font-variant-ligatures: discretionary-ligatures contextual;
-  font-feature-settings: "liga" 1, "dlig" 1, "calt" 1;
-}
-</style>
-
-
-
-# <span class="zipcal-title">FRREQUENCCY<br>MATâ€ŒTERSS</span>
+# <span class="zipcal-title">FRREQUENCCY<br>MA<span style="font-variant-ligatures: none; font-feature-settings: 'liga' 0, 'dlig' 0, 'calt' 0;">TT</span>ERSS</span>
 
 Fast Model-Agnostic Data Curation for Pruning and Quantization
 
-<div class="absolute bottom-10">
+<div class="absolute bottom-20">
   <span class="font-700">
     Francesco Pio Monaco, Elia Cunegatti, Flavio Vella, Giovanni Iacca  -  April 2026
   </span>
@@ -92,10 +73,24 @@ transition: fade
 
 # The Setting: Calibration Data for Model Compression
 Desired Properties
-
+<br><br>
 1. **Scalability (G1):** Can handle very large datasets with minimal computation.
+<br>
 2. **Model-agnostic (G2):** Finds the most informative examples without needing to run the full model.
+<br>
 3. **Inter-domain generalization (G3):** Works for both single-domain and multi-domain datasets by design.
+
+---
+transition: fade
+---
+# The Setting: Existing Methods
+<br>
+
+Many studies have shown that the choice of calibration data significantly impacts the performance of compressed models. Analysing the impact of length, domain, and diversity of calibration data on the performance of compressed models.
+
+Despite this information the most common method to select calibration data is still random sampling!
+
+SoTA techniques work by selecting samples that minimize model's perplexity, which requires running the full model on the entire dataset.
 
 ---
 transition: fade
@@ -107,7 +102,7 @@ transition: fade
 <ZipfianAnimation />
 
 <div style="font-size: 1.1rem; max-width: 600px; margin: 1.5rem auto 0 auto; text-align: center;">
-In natural language, a few words (like "the", "of", "and") are extremely common, while most words are rare. This is called a Zipfian distribution.
+In natural language, a few words (like "the", "of", "and") are extremely common, while most words are rare. This pattern given by the frequency of words is called a <strong>Zipfian distribution</strong>. We want to leverage this property to select <em>calibration data that closely represents the distribution of tokens in the original dataset</em>.
 </div>
 
 
@@ -198,17 +193,24 @@ Mean accuracy across 11 different tasks and 18 different calibration datasets.
 transition: fade
 ---
 
-# Remarks: The Difficulty of Choosing Calibration Data
- 
+# On The Difficulty of Choosing Calibration Data
+ <br>
 
-From the full results an interesting pattern emerges: the best calibration data 
+From the full results an interesting pattern emerges: the best calibration data for a certain task is not the one from the same domain. And no correlation emerges between the best calibration data and the task domain.
 
-**General Knowledge** tasks perform better under models compressed using data from the **Math** domain!
+E.g., **General Knowledge** tasks perform better under models compressed using data from the **Math** domain!
+
+This behaviour is exhacerbated when we consider multi-lingual setting, where we find that **the best calibration data for a given language is not necessarily in that language**.
+
+
 
 ---
 transition: fade
 ---
 
 # Obtaining Property G3: Multi-Domain ZipCal
+<br>
+Aggregating multiple datasets and running ZipCal would insert a bias towards bigger datasets.
 
-Aggregating multiple datasets and running ZipCal would
+<br><br>
+We run ZipCal on each dataset **separately** and then aggregate the results using a **k-centers clustering** algorithm to select the most representative samples across all datasets.
