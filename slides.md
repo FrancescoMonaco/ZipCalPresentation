@@ -1,4 +1,4 @@
----
+﻿---
 # You can also start simply with 'default'
 theme: default
 css: styles.css
@@ -43,7 +43,7 @@ mdc: true
 
 
 
-# <span class="zipcal-title">FRREQUENCCY<br>MAT‌TERSS</span>
+# <span class="zipcal-title">FRREQUENCCY<br>MATâ€ŒTERSS</span>
 
 Fast Model-Agnostic Data Curation for Pruning and Quantization
 
@@ -124,23 +124,86 @@ ZipCal is a method that samples data based on the frequency of tokens, following
 
 The data used for calibration is sampled according to the frequency of tokens, with more frequent tokens being more likely to be included in the calibration set.
 
+Samples are chosen as $s^*\leftarrow \argmax_{s\in D} |V_s\setminus V_{covered}|$
+
 ---
 transition: fade
 ---
 
 # Experiments: Scalability
+Time to select the calibration samples for different methods.
+
+<img src="./images/scalability_all.png" alt="Scalability Results" style="width: 100%; max-width: 600px; margin: 1.5rem auto; display: block;" />  
 
 ---
 transition: fade
 ---
 
 # Experiments: Quality
+Mean accuracy across 11 different tasks and 18 different calibration datasets.
+
+<table style="width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 0.84rem; line-height: 1.28;">
+  <thead>
+    <tr>
+      <th style="padding: 6px 8px; border: 1px solid #cbd5e1;"><strong>Method</strong></th>
+      <th style="padding: 6px 8px; border: 1px solid #cbd5e1;"><strong>Model</strong></th>
+      <th style="padding: 6px 8px; border: 1px solid #cbd5e1;"><strong>Dense</strong></th>
+      <th style="padding: 6px 8px; border: 1px solid #cbd5e1;"><strong>COLA</strong></th>
+      <th style="padding: 6px 8px; border: 1px solid #cbd5e1;"><strong>ZipCal</strong></th>
+      <th style="padding: 6px 8px; border: 1px solid #cbd5e1;"><strong>Delta</strong></th>
+      <th style="padding: 6px 8px; border: 1px solid #cbd5e1;"><strong>Speedup</strong></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td rowspan="2" style="padding: 6px 8px; border: 1px solid #cbd5e1; font-weight: 700; vertical-align: middle; background-color: #f8fafc;">Wanda 25%</td>
+      <td style="padding: 6px 8px; border: 1px solid #cbd5e1;">Llama-3.1-8B-Instruct</td>
+      <td style="padding: 6px 8px; border: 1px solid #cbd5e1;">63.36</td>
+      <td style="padding: 6px 8px; border: 1px solid #cbd5e1;">62.47</td>
+      <td style="padding: 6px 8px; border: 1px solid #cbd5e1;">62.94</td>
+      <td style="padding: 6px 8px; border: 1px solid #cbd5e1; background-color: #dcfce7; color: #166534; font-weight: 700;">+0.47</td>
+      <td style="padding: 6px 8px; border: 1px solid #cbd5e1; background-color: #f7fcdc; color: #5f5708; font-weight: 700;">228x</td>
+    </tr>
+    <tr>
+      <td style="padding: 6px 8px; border: 1px solid #cbd5e1;">gemma-2-9B-Instruct</td>
+      <td style="padding: 6px 8px; border: 1px solid #cbd5e1;">61.11</td>
+      <td style="padding: 6px 8px; border: 1px solid #cbd5e1;">61.15</td>
+      <td style="padding: 6px 8px; border: 1px solid #cbd5e1;">61.57</td>
+      <td style="padding: 6px 8px; border: 1px solid #cbd5e1; background-color: #dcfce7; color: #166534; font-weight: 700;">+0.42</td>
+      <td style="padding: 6px 8px; border: 1px solid #cbd5e1; background-color: #f7fcdc; color: #5f5708; font-weight: 700;">260x</td>
+    </tr>
+    <tr>
+      <td rowspan="2" style="padding: 6px 8px; border: 1px solid #cbd5e1; font-weight: 700; vertical-align: middle; background-color: #f8fafc;">GPTQ W4A16</td>
+      <td style="padding: 6px 8px; border: 1px solid #cbd5e1;">Llama-3.1-8B-Instruct</td>
+      <td style="padding: 6px 8px; border: 1px solid #cbd5e1;"> 63.36 </td>
+      <td style="padding: 6px 8px; border: 1px solid #cbd5e1;"> 61.02 </td>
+      <td style="padding: 6px 8px; border: 1px solid #cbd5e1;"> 60.89 </td>
+      <td style="padding: 6px 8px; border: 1px solid #cbd5e1; background-color: #fef3c7; color: #92400e; font-weight: 700;"> -0.13 </td>
+      <td style="padding: 6px 8px; border: 1px solid #cbd5e1; background-color: #f7fcdc; color: #5f5708; font-weight: 700;"> 228x </td>
+    </tr>
+    <tr>
+      <td style="padding: 6px 8px; border: 1px solid #cbd5e1;">gemma-2-9B-Instruct</td>
+      <td style="padding: 6px 8px; border: 1px solid #cbd5e1;"> 61.11 </td>
+      <td style="padding: 6px 8px; border: 1px solid #cbd5e1;"> 60.56 </td>
+      <td style="padding: 6px 8px; border: 1px solid #cbd5e1;"> 61.41 </td>
+      <td style="padding: 6px 8px; border: 1px solid #cbd5e1; background-color: #dcfce7; color: #166534; font-weight: 700;"> +0.85 </td>
+      <td style="padding: 6px 8px; border: 1px solid #cbd5e1; background-color: #f7fcdc; color: #5f5708; font-weight: 700;"> 260x </td>
+    </tr>
+  </tbody>
+</table>
+
+*full results include 2 other compression techniques
 
 ---
 transition: fade
 ---
 
 # Remarks: The Difficulty of Choosing Calibration Data
+ 
+
+From the full results an interesting pattern emerges: the best calibration data 
+
+**General Knowledge** tasks perform better under models compressed using data from the **Math** domain!
 
 ---
 transition: fade
