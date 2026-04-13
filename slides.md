@@ -28,7 +28,7 @@ mdc: true
 <style>
 @font-face {
   font-family: 'Stretch';
-  src: url('./fonts/StretchPro.otf') format('opentype');
+  src: url('/fonts/StretchPro.otf') format('opentype');
   font-display: swap;
 }
 
@@ -133,7 +133,7 @@ transition: fade
 # Experiments: Scalability
 Time to select the calibration samples for different methods.
 
-<img src="./images/scalability_all.png" alt="Scalability Results" style="width: 100%; max-width: 600px; margin: 1.5rem auto; display: block;" />  
+<img src="/images/scalability_all.png" alt="Scalability Results" style="width: 100%; max-width: 600px; margin: 1.5rem auto; display: block;" />  
 
 ---
 transition: fade
@@ -210,3 +210,5 @@ transition: fade
 ---
 
 # Obtaining Property G3: Multi-Domain ZipCal
+
+Aggregating multiple datasets and running ZipCal would
