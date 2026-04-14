@@ -38,7 +38,7 @@ body, .slidev-layout, .slidev-page {
 
 .logo-unitn {
   top: clamp(8px, 1.6vh, 18px);
-  width: clamp(110px, 13vw, 180px);
+  width: clamp(110px, 9vw, 180px);
   height: auto;
 }
 
