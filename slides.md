@@ -1,6 +1,6 @@
 ---
 theme: default
-css: styles.css
+#css: styles.css
 # random image from a curated Unsplash collection by Anthony
 # like them? see https://unsplash.com/collections/94734566/slidev
 background: '#e7f0f9'
@@ -39,11 +39,13 @@ transition: fade
 ---
 
 # The Setting: Model Compression
-What is Model Compression?
+What is model compression?
 
-Model compression is the process of reducing the size and computational requirements of a machine learning model while maintaining its performance. 
-
-This is often achieved through techniques that remove unnecessary parameters, reduce the precision of weights or distill knowledge from a larger model into a smaller one.
+<br>
+*Model compression* reduces model size and computational cost while preserving performance.
+<br>
+<br>
+It is typically achieved through pruning, quantization, or distillation.
 
 ---
 transition: fade
@@ -51,8 +53,8 @@ transition: fade
 
 # The Setting: What is Pruning?
 
-<div style="font-size: 1.1rem; max-width: 600px; margin: 0 auto 1rem auto;">
-Pruning removes unnecessary weights or neurons from a neural network, making it smaller and faster while aiming to keep accuracy high.
+<div style="font-size: 1.5rem; max-width: 600px; margin: 0 auto 1rem auto;">
+<strong>Pruning</strong> removes unnecessary weights or neurons from a neural network, even entire blocks (e.g. attention heads).
 </div>
 <PruningAnimation />
 
@@ -62,8 +64,8 @@ transition: fade
 
 # The Setting: What is Quantization?
 
-<div style="font-size: 1.1rem; max-width: 600px; margin: 0 auto 1rem auto;">
-Quantization reduces the precision of the numbers used to represent weights and activations, making the model smaller and faster, often with little loss in accuracy.
+<div style="font-size: 1.5rem; max-width: 600px; margin: 0 auto 1rem auto;">
+<strong>Quantization</strong> reduces the precision of the numbers used to represent weights and activations.
 </div>
 <QuantizationAnimation />
 
@@ -71,26 +73,48 @@ Quantization reduces the precision of the numbers used to represent weights and 
 transition: fade
 ---
 
-# The Setting: Calibration Data for Model Compression
-Desired Properties
-<br><br>
-1. **Scalability (G1):** Can handle very large datasets with minimal computation.
+# The Setting: Why Calibration Data Matters
+
 <br>
-2. **Model-agnostic (G2):** Finds the most informative examples without needing to run the full model.
-<br>
-3. **Inter-domain generalization (G3):** Works for both single-domain and multi-domain datasets by design.
+To run a compression framework, we need examples to capture the model's activation statistics: this subset is called *calibration data*.
+
 
 ---
 transition: fade
 ---
+
+# The Setting: Calibration Data for Model Compression
+Desired properties
+<br><br>
+1. **Scalability (G1):** Handle very large datasets with minimal computation.
+<br>
+2. **Model-agnostic (G2):** Find informative examples without running the full model.
+<br>
+3. **Inter-domain generalization (G3):** Work by design for both single-domain and multi-domain data.
+
+---
+transition: fade
+---
+
 # The Setting: Existing Methods
 <br>
 
-Many studies have shown that the choice of calibration data significantly impacts the performance of compressed models. Analysing the impact of length, domain, and diversity of calibration data on the performance of compressed models.
+Many studies show that calibration data selection strongly affects compressed-model quality, especially across length, domain, and diversity choices. [Bandari et al, 2024](https://scholar.google.com/scholar_url?url=https://aclanthology.org/2024.emnlp-main.1004/&hl=it&sa=T&oi=gsr-r&ct=res&cd=0&d=9018053943015335144&ei=yfDdaaroJfLLieoP_67FyQQ&scisig=ADi0EEU6d0-OeMrv1jyabpKFLxe1) [Oh and Oh, 2025](https://scholar.google.com/scholar_url?url=https://aclanthology.org/anthology-files/anthology-files/pdf/findings/2025.findings-emnlp.1054.pdf&hl=it&sa=T&oi=gsr-r-ggp&ct=res&cd=0&d=14192841322382081900&ei=ufDdaY7zMqztieoPm_X9-Aw&scisig=ADi0EEVkxgdprPmvqy4u8LCPuhAL)
 
-Despite this information the most common method to select calibration data is still random sampling!
+Despite this, random sampling is still widely used in practice.
 
-SoTA techniques work by selecting samples that minimize model's perplexity, which requires running the full model on the entire dataset.
+Most state-of-the-art methods minimize model perplexity, which requires full-model inference over the entire dataset.
+
+---
+transition: fade
+---
+
+# The Setting: Existing Methods
+State-of-the-art approaches
+
+<br>
+They optimize perplexity-based objectives (plus additional terms), but this requires full-model inference on all candidate samples, making the process computationally expensive and poorly scalable.
+
 
 ---
 transition: fade
@@ -102,7 +126,7 @@ transition: fade
 <ZipfianAnimation />
 
 <div style="font-size: 1.1rem; max-width: 600px; margin: 1.5rem auto 0 auto; text-align: center;">
-In natural language, a few words (like "the", "of", "and") are extremely common, while most words are rare. This pattern given by the frequency of words is called a <strong>Zipfian distribution</strong>. We want to leverage this property to select <em>calibration data that closely represents the distribution of tokens in the original dataset</em>.
+In natural language, a few words (like "the", "of", "and") are extremely common, while most words are rare. This frequency pattern is called a <strong>Zipfian distribution</strong>. We leverage it to select <em>calibration data that better matches the token distribution of the original dataset</em>.
 </div>
 
 
@@ -113,20 +137,30 @@ transition: fade
 # The Model: Zipfian Sampling
 Introducing ZipCal
 
-
-ZipCal is a method that samples data based on the frequency of tokens, following a Zipfian distribution.
-
-
-The data used for calibration is sampled according to the frequency of tokens, with more frequent tokens being more likely to be included in the calibration set.
-
+<br>
+ZipCal samples data according to token frequency, following a Zipfian distribution.
+<br>
+More frequent tokens are more likely to appear in the calibration set, but we also cover the tail of the distribution.
+<br>
 Samples are chosen as $s^*\leftarrow \argmax_{s\in D} |V_s\setminus V_{covered}|$
+<br>
+At each step, we pick the sample that contributes the largest set of not-yet-covered tokens.
+
+---
+transition: fade
+---
+
+# Experiments: Token Distribution
+Token distribution of the original dataset (grey) and calibration sets of 16 random (blue), COLA (green) and ZipCal (red) samples.
+
+<img src="/images/gsm8k_winogrande_hellaswag_token_dist_16samples-1.png" alt="Token Distribution" style="width: 200%; max-width: 930px; margin: 4rem -1.5rem; display: block;" />  
 
 ---
 transition: fade
 ---
 
 # Experiments: Scalability
-Time to select the calibration samples for different methods.
+Calibration sample selection time across methods.
 
 <img src="/images/scalability_all.png" alt="Scalability Results" style="width: 100%; max-width: 600px; margin: 1.5rem auto; display: block;" />  
 
@@ -135,7 +169,7 @@ transition: fade
 ---
 
 # Experiments: Quality
-Mean accuracy across 11 different tasks and 18 different calibration datasets.
+Mean accuracy across 11 tasks and 18 calibration datasets.
 
 <table style="width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 0.84rem; line-height: 1.28;">
   <thead>
@@ -187,7 +221,7 @@ Mean accuracy across 11 different tasks and 18 different calibration datasets.
   </tbody>
 </table>
 
-*full results include 2 other compression techniques
+*Full results include two additional compression techniques.
 
 ---
 transition: fade
@@ -196,11 +230,11 @@ transition: fade
 # On The Difficulty of Choosing Calibration Data
  <br>
 
-From the full results an interesting pattern emerges: the best calibration data for a certain task is not the one from the same domain. And no correlation emerges between the best calibration data and the task domain.
+From the full results, a clear pattern emerges: the best calibration data for a task often does not come from the same domain.
 
-E.g., **General Knowledge** tasks perform better under models compressed using data from the **Math** domain!
+For example, **General Knowledge** tasks can perform better when models are compressed with **Math** calibration data.
 
-This behaviour is exhacerbated when we consider multi-lingual setting, where we find that **the best calibration data for a given language is not necessarily in that language**.
+This behavior is exacerbated in multilingual settings, where **the best calibration data for a given language is not necessarily in that language**.
 
 
 
@@ -210,7 +244,75 @@ transition: fade
 
 # Obtaining Property G3: Multi-Domain ZipCal
 <br>
-Aggregating multiple datasets and running ZipCal would insert a bias towards bigger datasets.
+If we aggregate multiple datasets and run ZipCal once, selection becomes biased toward larger datasets.
 
-<br><br>
-We run ZipCal on each dataset **separately** and then aggregate the results using a **k-centers clustering** algorithm to select the most representative samples across all datasets.
+<br>
+<br>
+To avoid this, we run ZipCal on each dataset **separately**, then merge candidates with **k-centers clustering** to select representative samples across all datasets.
+
+---
+transition: fade
+---
+
+# Experiments: Quality
+Mean accuracy across 11 tasks and 18 calibration datasets.
+
+<table style="width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 0.84rem; line-height: 1.28;">
+  <thead>
+    <tr>
+      <th style="padding: 6px 8px; border: 1px solid #cbd5e1;"><strong>Method</strong></th>
+      <th style="padding: 6px 8px; border: 1px solid #cbd5e1;"><strong>Model</strong></th>
+      <th style="padding: 6px 8px; border: 1px solid #cbd5e1;"><strong>Dense</strong></th>
+      <th style="padding: 6px 8px; border: 1px solid #cbd5e1;"><strong>COLA</strong></th>
+      <th style="padding: 6px 8px; border: 1px solid #cbd5e1;"><strong>ZipCal Multi-Domain </strong></th>
+      <th style="padding: 6px 8px; border: 1px solid #cbd5e1;"><strong>Delta</strong></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td rowspan="2" style="padding: 6px 8px; border: 1px solid #cbd5e1; font-weight: 700; vertical-align: middle; background-color: #f8fafc;">Wanda 25%</td>
+      <td style="padding: 6px 8px; border: 1px solid #cbd5e1;">Llama-3.1-8B-Instruct</td>
+      <td style="padding: 6px 8px; border: 1px solid #cbd5e1;">63.36</td>
+      <td style="padding: 6px 8px; border: 1px solid #cbd5e1;">62.47</td>
+      <td style="padding: 6px 8px; border: 1px solid #cbd5e1;">64.48</td>
+      <td style="padding: 6px 8px; border: 1px solid #cbd5e1; background-color: #dcfce7; color: #166534; font-weight: 700;">+2.01</td>
+    </tr>
+    <tr>
+      <td style="padding: 6px 8px; border: 1px solid #cbd5e1;">gemma-2-9B-Instruct</td>
+      <td style="padding: 6px 8px; border: 1px solid #cbd5e1;">61.11</td>
+      <td style="padding: 6px 8px; border: 1px solid #cbd5e1;">61.15</td>
+      <td style="padding: 6px 8px; border: 1px solid #cbd5e1;">61.98</td>
+      <td style="padding: 6px 8px; border: 1px solid #cbd5e1; background-color: #dcfce7; color: #166534; font-weight: 700;">+0.83</td>
+    </tr>
+    <tr>
+      <td rowspan="2" style="padding: 6px 8px; border: 1px solid #cbd5e1; font-weight: 700; vertical-align: middle; background-color: #f8fafc;">GPTQ W4A16</td>
+      <td style="padding: 6px 8px; border: 1px solid #cbd5e1;">Llama-3.1-8B-Instruct</td>
+      <td style="padding: 6px 8px; border: 1px solid #cbd5e1;"> 63.36 </td>
+      <td style="padding: 6px 8px; border: 1px solid #cbd5e1;"> 61.02 </td>
+      <td style="padding: 6px 8px; border: 1px solid #cbd5e1;"> 61.48 </td>
+      <td style="padding: 6px 8px; border: 1px solid #cbd5e1; background-color: #dcfce7; color: #166534; font-weight: 700;"> +0.46 </td>
+    </tr>
+    <tr>
+      <td style="padding: 6px 8px; border: 1px solid #cbd5e1;">gemma-2-9B-Instruct</td>
+      <td style="padding: 6px 8px; border: 1px solid #cbd5e1;"> 61.11 </td>
+      <td style="padding: 6px 8px; border: 1px solid #cbd5e1;"> 60.56 </td>
+      <td style="padding: 6px 8px; border: 1px solid #cbd5e1;"> 61.54 </td>
+      <td style="padding: 6px 8px; border: 1px solid #cbd5e1; background-color: #dcfce7; color: #166534; font-weight: 700;"> +0.98 </td>
+    </tr>
+  </tbody>
+</table>
+
+*Full results include two additional compression techniques.
+
+
+---
+transition: fade
+---
+
+# Main Takeaways 
+<br>
+
+- Choosing calibration data is hard.
+- Compressing models using multi-domain data can lead to better performances across tasks.
+- ZipCal is a simple, model-agnostic method to select calibration data that matches the token distribution of the original dataset.
+- ZipCal naturally extends to multi-domain settings, where it can select representative samples across datasets, leading to better performance than single-domain selection.
