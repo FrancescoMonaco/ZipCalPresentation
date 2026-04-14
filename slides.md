@@ -1,6 +1,6 @@
 ---
 theme: default
-#css: styles.css
+css: styles.css
 # random image from a curated Unsplash collection by Anthony
 # like them? see https://unsplash.com/collections/94734566/slidev
 background: '#e7f0f9'
