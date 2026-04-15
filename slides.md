@@ -1,6 +1,6 @@
 ---
 theme: default
-css: styles.css
+#css: styles.css
 # random image from a curated Unsplash collection by Anthony
 # like them? see https://unsplash.com/collections/94734566/slidev
 background: '#e7f0f9'
@@ -42,7 +42,7 @@ transition: fade
 What is model compression?
 
 <br>
-*Model compression* reduces model size and computational cost while preserving performance.
+<em>Model compression</em> reduces model size and computational cost while preserving performance.
 <br>
 <br>
 It is typically achieved through pruning, quantization, or distillation.
@@ -76,7 +76,7 @@ transition: fade
 # The Setting: Why Calibration Data Matters
 
 <br>
-To run a compression framework, we need examples to capture the model's activation statistics: this subset is called *calibration data*.
+To run a compression framework, we need examples to capture the model's activation statistics: this subset is called <em>calibration data</em>.
 
 
 ---
@@ -86,11 +86,11 @@ transition: fade
 # The Setting: Calibration Data for Model Compression
 Desired properties
 <br><br>
-1. **Scalability (G1):** Handle very large datasets with minimal computation.
+1. <strong>Scalability (G1):</strong> Handle very large datasets with minimal computation.
 <br>
-2. **Model-agnostic (G2):** Find informative examples without running the full model.
+2. <strong>Model-agnostic (G2):</strong> Find informative examples without running the full model.
 <br>
-3. **Inter-domain generalization (G3):** Work by design for both single-domain and multi-domain data.
+3. <strong>Inter-domain generalization (G3):</strong> Work by design for both single-domain and multi-domain data.
 
 ---
 transition: fade
@@ -129,22 +129,22 @@ transition: fade
 In natural language, a few words (like "the", "of", "and") are extremely common, while most words are rare. This frequency pattern is called a <strong>Zipfian distribution</strong>. We leverage it to select <em>calibration data that better matches the token distribution of the original dataset</em>.
 </div>
 
-
 ---
 transition: fade
 ---
 
-# The Model: Zipfian Sampling
-Introducing ZipCal
+# The Model: Introducing ZipCal
 
 <br>
 ZipCal samples data according to token frequency, following a Zipfian distribution.
 <br>
 More frequent tokens are more likely to appear in the calibration set, but we also cover the tail of the distribution.
 <br>
-Samples are chosen as $s^*\leftarrow \argmax_{s\in D} |V_s\setminus V_{covered}|$
-<br>
-At each step, we pick the sample that contributes the largest set of not-yet-covered tokens.
+Samples are chosen as
+$$
+s^* \leftarrow \arg\max_{s \in D} \left|V_s \setminus V_{covered}\right|
+$$
+
 
 ---
 transition: fade
@@ -221,7 +221,7 @@ Mean accuracy across 11 tasks and 18 calibration datasets.
   </tbody>
 </table>
 
-*Full results include two additional compression techniques.
+<em>Full results include two additional compression techniques and languages.</em>
 
 ---
 transition: fade
@@ -232,9 +232,9 @@ transition: fade
 
 From the full results, a clear pattern emerges: the best calibration data for a task often does not come from the same domain.
 
-For example, **General Knowledge** tasks can perform better when models are compressed with **Math** calibration data.
+For example, <strong>General Knowledge</strong> tasks can perform better when models are compressed with <strong>Math</strong> calibration data.
 
-This behavior is exacerbated in multilingual settings, where **the best calibration data for a given language is not necessarily in that language**.
+This behavior is exacerbated in multilingual settings, where <strong>the best calibration data for a given language is not necessarily in that language</strong>.
 
 
 
@@ -248,7 +248,7 @@ If we aggregate multiple datasets and run ZipCal once, selection becomes biased 
 
 <br>
 <br>
-To avoid this, we run ZipCal on each dataset **separately**, then merge candidates with **k-centers clustering** to select representative samples across all datasets.
+To avoid this, we run ZipCal on each dataset <strong>separately</strong>, then merge candidates with <strong>k-centers clustering</strong> to select representative samples across all datasets.
 
 ---
 transition: fade
@@ -302,7 +302,7 @@ Mean accuracy across 11 tasks and 18 calibration datasets.
   </tbody>
 </table>
 
-*Full results include two additional compression techniques.
+<em>Full results include two additional compression techniques and languages.</em>
 
 
 ---
