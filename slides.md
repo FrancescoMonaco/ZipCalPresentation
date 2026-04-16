@@ -86,11 +86,11 @@ transition: fade
 # The Setting: Calibration Data for Model Compression
 Desired properties
 <br><br>
-1. <strong>Scalability (G1):</strong> Handle very large datasets with minimal computation.
+1. <strong>Scalable (G1):</strong> Handle very large datasets with minimal computation.
 <br>
 2. <strong>Model-agnostic (G2):</strong> Find informative examples without running the full model.
 <br>
-3. <strong>Inter-domain generalization (G3):</strong> Work by design for both single-domain and multi-domain data.
+3. <strong>Inter-domain generalizable (G3):</strong> Work by design for both single-domain and multi-domain data.
 
 ---
 transition: fade
@@ -100,9 +100,11 @@ transition: fade
 <br>
 
 Many studies show that calibration data selection strongly affects compressed-model quality, especially across length, domain, and diversity choices. [Bandari et al, 2024](https://scholar.google.com/scholar_url?url=https://aclanthology.org/2024.emnlp-main.1004/&hl=it&sa=T&oi=gsr-r&ct=res&cd=0&d=9018053943015335144&ei=yfDdaaroJfLLieoP_67FyQQ&scisig=ADi0EEU6d0-OeMrv1jyabpKFLxe1) [Oh and Oh, 2025](https://scholar.google.com/scholar_url?url=https://aclanthology.org/anthology-files/anthology-files/pdf/findings/2025.findings-emnlp.1054.pdf&hl=it&sa=T&oi=gsr-r-ggp&ct=res&cd=0&d=14192841322382081900&ei=ufDdaY7zMqztieoPm_X9-Aw&scisig=ADi0EEVkxgdprPmvqy4u8LCPuhAL)
-
+<br>
+<br>
 Despite this, random sampling is still widely used in practice.
-
+<br>
+<br>
 Most state-of-the-art methods minimize model perplexity, which requires full-model inference over the entire dataset.
 
 ---
@@ -231,9 +233,11 @@ transition: fade
  <br>
 
 From the full results, a clear pattern emerges: the best calibration data for a task often does not come from the same domain.
-
+<br>
+<br>
 For example, <strong>General Knowledge</strong> tasks can perform better when models are compressed with <strong>Math</strong> calibration data.
-
+<br>
+<br>
 This behavior is exacerbated in multilingual settings, where <strong>the best calibration data for a given language is not necessarily in that language</strong>.
 
 
